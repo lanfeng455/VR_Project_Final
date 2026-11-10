@@ -1,0 +1,14 @@
+{
+    "packageName": "com.whisper.unity",
+    "version": "1.4.0",
+    "source": "Embedded",
+    "keyboardScene": "Assets/TenDaysTests/LLM_Keyboard_Test.unity",
+    "error": "",
+    "modelLoaded": true,
+    "multilingual": true,
+    "chatUIWired": true,
+    "personalityAssigned": true,
+    "apiKeyPresent": true,
+    "modelBytes": 77691713,
+    "missingScripts": 0
+}

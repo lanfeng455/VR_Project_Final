@@ -1,0 +1,8 @@
+{
+    "scene": "Assets/TenDaysTests/WhisperStandalone/Whisper_Standalone_Test.unity",
+    "transcript": " And so my fellow Americans ask not what your country can do for you, ask what you can do for your country.",
+    "error": "",
+    "modelLoaded": true,
+    "inferenceSucceeded": true,
+    "duration": 0.2724449932575226
+}

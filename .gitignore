@@ -1,4 +1,22 @@
 /Library
 /Logs
 /Temp
-Assets/Fonts/NotoSerifCJKsc-Black SDF.asset
+
+# Local editor state and generated files
+.DS_Store
+/UserSettings/
+/Obj/
+/obj/
+/Build/
+/Builds/
+/.vs/
+*.csproj
+*.sln
+*.slnx
+
+# Original import archives; the extracted Assets are committed
+*.unitypackage
+*.unitypackage.meta
+
+# Local recovery report
+/RecoveryValidation.txt

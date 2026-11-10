@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/Macoron/whisper.unity",
+  "packageVersion": "1.4.0",
+  "archiveSha256": "b92198c411f52fef3884c5821ca3e9e89941f3ec7a917fd726745403c5b37fc0",
+  "installation": "embedded local UPM package",
+  "model": "ggml-tiny.bin (multilingual)",
+  "keyboardScene": "Assets/TenDaysTests/LLM_Keyboard_Test.unity",
+  "microphoneScene": "Assets/TenDaysTests/WhisperMicrophone/2 - Microphone.unity"
+}
