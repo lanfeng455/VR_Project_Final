@@ -17,6 +17,12 @@ namespace Game.Core
         public int id;
         public string question;
         public string answer;
+
+        /// <summary>关键问题：会改变场景状态，LOG 里用强调色显示。</summary>
+        public bool isKey;
+
+        /// <summary>闲聊：不是真正的提问，不进 LOG。</summary>
+        public bool isChitchat;
     }
 
     /// <summary>
@@ -116,8 +122,17 @@ namespace Game.Core
 
         /// <summary>
         /// 记录玩家提问（答案留空），返回稳定的提问编号。
+        /// isChitchat 为 true 时该条不会出现在 LUNA LOG 里。
         /// </summary>
         public int RecordQuestion(string question)
+        {
+            return RecordQuestion(question, false, false);
+        }
+
+        public int RecordQuestion(
+            string question,
+            bool isKey,
+            bool isChitchat)
         {
             if (string.IsNullOrWhiteSpace(question))
                 return -1;
@@ -129,7 +144,9 @@ namespace Game.Core
                 {
                     id = id,
                     question = question.Trim(),
-                    answer = string.Empty
+                    answer = string.Empty,
+                    isKey = isKey,
+                    isChitchat = isChitchat
                 }
             );
 
@@ -153,6 +170,27 @@ namespace Game.Core
 
                 TurtleSoupEntry entry = questions[i];
                 entry.answer = answer ?? string.Empty;
+                questions[i] = entry;
+
+                QuestionsChanged?.Invoke();
+                return;
+            }
+        }
+
+        /// <summary>
+        /// 更新某条提问的标记。判定逻辑（是否闲聊/是否关键）在调用方，
+        /// 这里只负责存储，方便后续接入真正的判定来源。
+        /// </summary>
+        public void SetQuestionFlags(int id, bool isKey, bool isChitchat)
+        {
+            for (int i = 0; i < questions.Count; i++)
+            {
+                if (questions[i].id != id)
+                    continue;
+
+                TurtleSoupEntry entry = questions[i];
+                entry.isKey = isKey;
+                entry.isChitchat = isChitchat;
                 questions[i] = entry;
 
                 QuestionsChanged?.Invoke();

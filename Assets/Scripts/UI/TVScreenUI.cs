@@ -1,46 +1,77 @@
 using System.Text;
+using Game.Core;
 using TMPro;
 using UnityEngine;
-using Game.Core;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 namespace Game.UI
 {
     /// <summary>
-    /// 世界空间电视屏的显示层：
-    /// 左侧显示最近的对话日志，右侧显示海龟汤问答。
-    /// 只读取 GameManager 的数据，不包含任何游戏逻辑。
+    /// 电视屏显示层控制器。
+    /// 界面物体由编辑器菜单 Tools/VR Project/LUNA/Build TV UI In Scene
+    /// 一次性生成并保存到场景中，运行时这里只负责：
+    /// 切换 A/B 显隐、写入文字、驱动月亮波纹。
     /// </summary>
     public sealed class TVScreenUI : MonoBehaviour
     {
-        [Header("窗口")]
+        public static TVScreenUI Instance { get; private set; }
+
+        [Header("界面根节点")]
+        [Tooltip("界面 A：月亮 + LUNA + Need A Hint? + 六条提示。")]
+        [SerializeField] private GameObject homeRoot;
+
+        [Tooltip("界面 B：LUNA LOG 问答记录。")]
+        [SerializeField] private GameObject logRoot;
+
+        [Header("月亮")]
+        [SerializeField] private LunaMoonGraphic homeMoon;
+        [SerializeField] private LunaMoonGraphic logMoon;
+
+        [Header("界面 B 文本")]
         [SerializeField] private TMP_Text logText;
-        [SerializeField] private TMP_Text questionText;
+        [SerializeField] private string emptyLogText = "No questions yet.";
+        [SerializeField] private string questionLabel = "Question: ";
+        [SerializeField] private string keyQuestionLabel = "Key Question: ";
+        [SerializeField] private string answerLabel = "Answer: ";
 
-        [Header("格式")]
-        [SerializeField] private string logLineFormat =
-            "<color=#7FD3FF>{0}</color>  {1}";
+        [Header("颜色")]
+        [SerializeField] private Color textColor =
+            new Color(0.95f, 0.95f, 0.95f, 1f);
+        [SerializeField] private Color dimColor =
+            new Color(0.86f, 0.86f, 0.86f, 1f);
+        [SerializeField] private Color keyQuestionColor =
+            new Color(0.78f, 0.35f, 0.32f, 1f);
 
-        [SerializeField] private string questionLineFormat =
-            "<color=#FFD27F>问：</color>{0}\n<color=#9BE29B>答：</color>{1}";
+        [Header("输入")]
+        [Tooltip("编辑器/PC 上用 L 键在界面 A、B 之间切换。")]
+        [SerializeField] private bool enableLogKey = true;
 
-        [SerializeField] private string emptyLogText = "暂无对话记录。";
-        [SerializeField] private string emptyQuestionText = "暂无提问。";
-        [SerializeField] private string blankAnswerText = "……";
+        [Tooltip("自动跟随对话气泡的打字机状态驱动波纹。")]
+        [SerializeField] private bool autoDriveSpeaking = true;
 
+        private bool showingLog;
         private bool bound;
+
+        public bool IsShowingLog => showingLog;
 
         private void Awake()
         {
+            Instance = this;
+
 #if UNITY_EDITOR
-            // 编辑器里 OVROverlayCanvas 的画面由运行时合成器叠加，Game 视图看不到，会是一片黑。
-            // 这里退成普通 World Space Canvas，让 PC 上也能看到屏幕内容。
-            var overlay = GetComponent<OVROverlayCanvas>();
+            // 编辑器里 OVROverlayCanvas 的合成不会在 Game 视图生效，
+            // 关掉它才能直接看到 World Space UI。
+            OVROverlayCanvas overlay = GetComponent<OVROverlayCanvas>();
 
             if (overlay != null)
                 overlay.enabled = false;
 
-            SetLayerRecursively(gameObject, 0);
+            gameObject.layer = 0;
 #endif
+
+            ShowHome();
         }
 
         private void Start()
@@ -51,7 +82,136 @@ namespace Game.UI
         private void OnDestroy()
         {
             Unbind();
+
+            if (Instance == this)
+                Instance = null;
         }
+
+        private void Update()
+        {
+            if (autoDriveSpeaking)
+            {
+                DialogueBubble bubble = DialogueBubble.Instance;
+                SetSpeaking(bubble != null && bubble.IsTyping);
+            }
+
+#if ENABLE_INPUT_SYSTEM
+            if (enableLogKey &&
+                Keyboard.current != null &&
+                Keyboard.current.lKey.wasPressedThisFrame)
+            {
+                if (showingLog)
+                    ShowHome();
+                else
+                    ShowLog();
+            }
+#endif
+        }
+
+        // ---------------- 对外接口 ----------------
+
+        /// <summary>切到界面 A（月亮 + Need A Hint?）。</summary>
+        public void ShowHome()
+        {
+            showingLog = false;
+            SetActive(homeRoot, true);
+            SetActive(logRoot, false);
+            SetSpeaking(false);
+        }
+
+        /// <summary>切到界面 B（LUNA LOG）。</summary>
+        public void ShowLog()
+        {
+            showingLog = true;
+            SetActive(homeRoot, false);
+            SetActive(logRoot, true);
+            SetSpeaking(false);
+            RefreshLog();
+        }
+
+        /// <summary>驱动月亮波纹：主持人说话时 true。</summary>
+        public void SetSpeaking(bool value)
+        {
+            if (homeMoon != null)
+                homeMoon.SetSpeaking(value);
+
+            if (logMoon != null)
+                logMoon.SetSpeaking(value);
+        }
+
+        /// <summary>
+        /// 追加一条问答记录。isKey 决定 Question 行是否用强调色。
+        /// 闲聊不应传到这里（见 GameManager 的 isChitchat 过滤）。
+        /// </summary>
+        public void AddEntry(string question, string answer, bool isKey)
+        {
+            GameManager manager = GameManager.Instance;
+
+            if (manager == null)
+                return;
+
+            int id = manager.RecordQuestion(question, isKey, false);
+
+            if (id > 0 && !string.IsNullOrWhiteSpace(answer))
+                manager.RecordAnswer(id, answer);
+        }
+
+        public void RefreshLog()
+        {
+            if (logText == null)
+                return;
+
+            GameManager manager = GameManager.Instance;
+
+            if (manager == null || manager.Questions.Count == 0)
+            {
+                logText.text = emptyLogText;
+                return;
+            }
+
+            var builder = new StringBuilder();
+            int shown = 0;
+
+            for (int i = 0; i < manager.Questions.Count; i++)
+            {
+                TurtleSoupEntry entry = manager.Questions[i];
+
+                // 闲聊不进 LOG，只保留真正的提问。
+                if (entry.isChitchat)
+                    continue;
+
+                if (shown > 0)
+                    builder.Append('\n');
+
+                string label = entry.isKey
+                    ? keyQuestionLabel
+                    : questionLabel;
+
+                string color = ColorUtility.ToHtmlStringRGB(
+                    entry.isKey ? keyQuestionColor : textColor
+                );
+
+                string answer = string.IsNullOrWhiteSpace(entry.answer)
+                    ? "…"
+                    : entry.answer.Trim();
+
+                builder.AppendFormat(
+                    "<color=#{0}>{1}{2}</color>\n<color=#{3}>{4}{5}</color>",
+                    color,
+                    label,
+                    entry.question,
+                    ColorUtility.ToHtmlStringRGB(dimColor),
+                    answerLabel,
+                    answer
+                );
+
+                shown++;
+            }
+
+            logText.text = shown == 0 ? emptyLogText : builder.ToString();
+        }
+
+        // ---------------- 内部 ----------------
 
         private void Bind()
         {
@@ -63,19 +223,17 @@ namespace Game.UI
             if (manager == null)
             {
                 Debug.LogWarning(
-                    "TVScreenUI：场景里没有 GameManager。",
+                    "TVScreenUI: no GameManager found in the scene.",
                     this
                 );
 
                 return;
             }
 
-            manager.LogChanged += RefreshLog;
-            manager.QuestionsChanged += RefreshQuestions;
+            manager.QuestionsChanged += RefreshLog;
             bound = true;
 
             RefreshLog();
-            RefreshQuestions();
         }
 
         private void Unbind()
@@ -86,102 +244,15 @@ namespace Game.UI
             GameManager manager = GameManager.Instance;
 
             if (manager != null)
-            {
-                manager.LogChanged -= RefreshLog;
-                manager.QuestionsChanged -= RefreshQuestions;
-            }
+                manager.QuestionsChanged -= RefreshLog;
 
             bound = false;
         }
 
-        public void RefreshLog()
+        private static void SetActive(GameObject target, bool value)
         {
-            if (logText == null)
-                return;
-
-            GameManager manager = GameManager.Instance;
-
-            if (manager == null || manager.LogEntries.Count == 0)
-            {
-                logText.text = emptyLogText;
-                return;
-            }
-
-            var builder = new StringBuilder();
-
-            for (int i = 0; i < manager.LogEntries.Count; i++)
-            {
-                DialogueLogEntry entry = manager.LogEntries[i];
-
-                if (builder.Length > 0)
-                    builder.Append('\n');
-
-                builder.AppendFormat(
-                    logLineFormat,
-                    entry.speaker,
-                    entry.text
-                );
-            }
-
-            logText.text = builder.ToString();
+            if (target != null && target.activeSelf != value)
+                target.SetActive(value);
         }
-
-        public void RefreshQuestions()
-        {
-            if (questionText == null)
-                return;
-
-            GameManager manager = GameManager.Instance;
-
-            if (manager == null || manager.Questions.Count == 0)
-            {
-                questionText.text = emptyQuestionText;
-                return;
-            }
-
-            var builder = new StringBuilder();
-
-            for (int i = 0; i < manager.Questions.Count; i++)
-            {
-                TurtleSoupEntry entry = manager.Questions[i];
-
-                if (builder.Length > 0)
-                    builder.Append("\n\n");
-
-                string answer = string.IsNullOrWhiteSpace(entry.answer)
-                    ? blankAnswerText
-                    : entry.answer;
-
-                builder.AppendFormat(
-                    questionLineFormat,
-                    entry.question,
-                    answer
-                );
-            }
-
-            questionText.text = builder.ToString();
-        }
-
-        /// <summary>按钮回调：清空日志。</summary>
-        public void ClearLog()
-        {
-            GameManager.Instance?.ClearLog();
-        }
-
-        /// <summary>按钮回调：清空海龟汤问答。</summary>
-        public void ClearQuestions()
-        {
-            GameManager.Instance?.ClearQuestions();
-        }
-
-#if UNITY_EDITOR
-        private static void SetLayerRecursively(GameObject target, int layer)
-        {
-            target.layer = layer;
-
-            foreach (Transform child in target.transform)
-                SetLayerRecursively(child.gameObject, layer);
-        }
-#endif
     }
 }

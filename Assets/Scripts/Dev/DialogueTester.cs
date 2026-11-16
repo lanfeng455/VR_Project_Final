@@ -14,18 +14,18 @@ namespace Game.Dev
         [Header("语句库")]
         [SerializeField] private string[] lines =
         {
-            "我已记下你的提问，可以继续追问。",
-            "线索不会直接出现，试着问得更具体一些。",
-            "刚才那句话里，有一部分并不完全准确。",
-            "再问一个问题，也许能拼出新的答案。"
+            "I wrote your question down. Feel free to keep digging.",
+            "Clues never show up directly. Try asking something more specific.",
+            "Part of what you just said is not entirely accurate.",
+            "Ask one more question. You might piece together a new answer."
         };
 
         [SerializeField] private string[] questions =
         {
-            "他说那句话的时候，还有别人在场吗？",
-            "桌上的杯子是谁放上去的？",
-            "他为什么没有立刻报警？",
-            "门是从里面锁上的吗？"
+            "Was anyone else there when he said that?",
+            "Who put the cup on the table?",
+            "Why didn't he call the police right away?",
+            "Was the door locked from the inside?"
         };
 
         [Header("播放")]

@@ -41,13 +41,13 @@ namespace Game.UI
         {
             if (npc == null)
             {
-                SetStatus("未配置 NPC。");
+                SetStatus("NPC is not configured.");
                 SetInteractable(false);
                 return;
             }
 
             npcNameText.text = npc.CharacterName;
-            SetStatus("可以开始聊天了。");
+            SetStatus("You can start chatting.");
         }
 
         private void OnDestroy()
@@ -79,11 +79,11 @@ namespace Game.UI
 
             messageInput.text = "";
 
-            AddMessage("你", text, true);
+            AddMessage("You", text, true);
 
             isSending = true;
             SetInteractable(false);
-            SetStatus($"{npc.CharacterName} 正在思考……");
+            SetStatus($"{npc.CharacterName} is thinking…");
 
             StartCoroutine(SendRoutine(text));
         }
@@ -105,21 +105,21 @@ namespace Game.UI
                     false
                 );
 
-                SetStatus("可以继续聊天了。");
+                SetStatus("You can keep chatting.");
             }
             else
             {
                 string error = result != null
                     ? result.Error
-                    : "没有收到有效响应。";
+                    : "No valid response received.";
 
                 AddMessage(
-                    "系统",
-                    $"请求失败：{error}",
+                    "System",
+                    $"Request failed: {error}",
                     false
                 );
 
-                SetStatus("请求失败，请检查网络和 API 配置。");
+                SetStatus("Request failed. Check the network and API config.");
             }
 
             isSending = false;
@@ -166,7 +166,7 @@ namespace Game.UI
                 Destroy(content.GetChild(i).gameObject);
             }
 
-            SetStatus("对话已清空，可以重新开始。");
+            SetStatus("Conversation cleared. You can start over.");
             messageInput.ActivateInputField();
         }
 

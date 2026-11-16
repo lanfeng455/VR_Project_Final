@@ -46,6 +46,9 @@ namespace Game.UI
         [Tooltip("气泡底边比视线（水平方向）低多少米。")]
         [SerializeField, Range(0.2f, 1.6f)]
         private float metersBelowEye = 0.9f;
+        [Tooltip("被近处实体挡住时，气泡最多能拉近到多少米。")]
+        [SerializeField, Range(0.5f, 1.5f)]
+        private float minViewDistance = 0.9f;
         [Tooltip("留空时自动使用 Camera.main（VR 中为中心眼相机）。")]
         [SerializeField] private Camera targetCamera;
 
@@ -140,6 +143,49 @@ namespace Game.UI
 #endif
 
         /// <summary>
+        /// 沿着视线（以及视线下方到气泡底边的方向）探测场景实体，
+        /// 把气泡距离压到实体之前，避免被桌面、墙体切掉。
+        /// </summary>
+        private float ClampViewDistance(Camera camera, Vector3 forward)
+        {
+            Vector3 eye = camera.transform.position;
+            float allowed = viewDistance;
+
+            if (Physics.Raycast(
+                    eye,
+                    forward,
+                    out RaycastHit hit,
+                    allowed,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore))
+            {
+                allowed = hit.distance;
+            }
+
+            // 桌面、台面通常低于视线，只探视平线是探不到的。
+            Vector3 toBottom =
+                forward * viewDistance + Vector3.down * metersBelowEye;
+            float bottomLength = toBottom.magnitude;
+
+            if (bottomLength > 0.01f &&
+                Physics.Raycast(
+                    eye,
+                    toBottom / bottomLength,
+                    out RaycastHit bottomHit,
+                    bottomLength,
+                    Physics.DefaultRaycastLayers,
+                    QueryTriggerInteraction.Ignore))
+            {
+                allowed = Mathf.Min(
+                    allowed,
+                    viewDistance * (bottomHit.distance / bottomLength)
+                );
+            }
+
+            return Mathf.Max(minViewDistance, allowed - 0.15f);
+        }
+
+        /// <summary>
         /// 头显里把字幕放到 overlay 层渲染，避免被电视屏的 PunchAHole 从眼睛画面里擦掉。
         /// 同时保留普通 Canvas 渲染，PC 的 Game 视图依然能看到字幕。
         /// </summary>
@@ -148,10 +194,14 @@ namespace Game.UI
             if (!OVRManager.isHmdPresent)
                 return;
 
-            if (GetComponent<OVROverlayCanvas>() != null)
-                return;
+            var overlay = GetComponent<OVROverlayCanvas>();
 
-            var overlay = gameObject.AddComponent<OVROverlayCanvas>();
+            if (overlay == null)
+                overlay = gameObject.AddComponent<OVROverlayCanvas>();
+
+            // 必须用 OverlayType.Overlay：它渲染在场景内容之上。
+            // 预制体里遗留的是 PunchAHole（Underlay，渲染在场景内容之后），
+            // 所以气泡只要贴近桌子/墙/电视，就会被实体盖住或"插进"模型里。
             overlay.compositionMode =
                 OVROverlayCanvas.CompositionMode.DepthTested;
             overlay.shape = OVROverlayCanvas.CanvasShape.Flat;
@@ -178,15 +228,30 @@ namespace Game.UI
 
             RectTransform canvasRect = (RectTransform)transform;
 
+            // 只取相机的水平朝向（yaw）来放置。
+            // 不能直接用相机朝向：低头看屏幕时气泡会跟着转到脚下，
+            // 距离一远就沉到地面以下（头显里就是"嵌进地里"、Game 视图里整块被地板挡住）。
+            Vector3 forward = camera.transform.forward;
+            forward.y = 0f;
+
+            if (forward.sqrMagnitude < 1e-4f)
+                forward = Vector3.forward;
+
+            forward.Normalize();
+
+            // 1.8 米的正前方经常正好是桌子、墙或电视本体，
+            // 气泡会被近处实体切掉一半。用射线把气泡压到实体之前。
+            float distance = ClampViewDistance(camera, forward);
+
             // 只量横向：气泡宽度要始终占视野宽度的固定比例。
             // 直接问相机"实际会怎么投影"，比读 FOV 可靠（XR 下两者不一致）。
             Vector3 probeLeft =
                 camera.transform.TransformPoint(
-                    new Vector3(-1f, 0f, viewDistance));
+                    new Vector3(-1f, 0f, distance));
 
             Vector3 probeRight =
                 camera.transform.TransformPoint(
-                    new Vector3(1f, 0f, viewDistance));
+                    new Vector3(1f, 0f, distance));
 
             float viewportPerMeterX =
                 (camera.WorldToViewportPoint(probeRight).x -
@@ -196,7 +261,7 @@ namespace Game.UI
             float halfWidth =
                 viewportPerMeterX > 0f
                     ? 0.5f / viewportPerMeterX
-                    : viewDistance *
+                    : distance *
                       Mathf.Tan(camera.fieldOfView * 0.5f * Mathf.Deg2Rad) *
                       camera.aspect;
 
@@ -222,19 +287,8 @@ namespace Game.UI
                       - canvasRect.rect.height * 0.5f
                     : -canvasRect.rect.height * 0.5f;
 
-            // 只取相机的水平朝向（yaw）来放置。
-            // 不能直接用相机朝向：低头看屏幕时气泡会跟着转到脚下，
-            // 距离一远就沉到地面以下（头显里就是"嵌进地里"、Game 视图里整块被地板挡住）。
-            Vector3 forward = camera.transform.forward;
-            forward.y = 0f;
-
-            if (forward.sqrMagnitude < 1e-4f)
-                forward = Vector3.forward;
-
-            forward.Normalize();
-
             Vector3 position =
-                camera.transform.position + forward * viewDistance;
+                camera.transform.position + forward * distance;
 
             // 底边比视线低 metersBelowEye，再把 Canvas 中心从底边抬回来。
             position.y -= metersBelowEye;
@@ -310,6 +364,42 @@ namespace Game.UI
             routine = StartCoroutine(
                 ShowRoutine(text, false)
             );
+        }
+
+        /// <summary>
+        /// 常驻显示一段短提示（例如录音指示），直到外部调用 Hide()。
+        /// 复用同一个气泡，不新增任何 UI 容器。
+        /// </summary>
+        public void ShowSticky(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                Hide();
+                return;
+            }
+
+            Restart();
+
+            routine = StartCoroutine(StickyRoutine(text));
+        }
+
+        private IEnumerator StickyRoutine(string text)
+        {
+            isShowing = true;
+            IsTyping = false;
+            speechFinished = true;
+
+            if (contentText != null)
+            {
+                contentText.text = text;
+                contentText.maxVisibleCharacters = int.MaxValue;
+                contentText.ForceMeshUpdate();
+            }
+
+            yield return FadeTo(1f, 0f, fadeDuration);
+
+            // 不自隐藏：等调用方在录音结束时调 Hide()。
+            routine = null;
         }
 
         /// <summary>播放隐藏动画。</summary>
@@ -513,7 +603,7 @@ namespace Game.UI
             if (Instance == null)
             {
                 Debug.LogWarning(
-                    "DialogueBubble：当前场景没有可用的对话UI。"
+                    "DialogueBubble: no dialogue UI available in the current scene."
                 );
                 return;
             }

@@ -281,13 +281,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178363121}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47200275b12f8ea44bc22aa9ec2d51f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.NPC.NPCChatTestBootstrap
   npc: {fileID: 178363123}
-  apiKey: sk-200488c47eae4316b1c9df18607cdbaf
+  apiKey: 
   model: deepseek-flash
 --- !u!114 &178363123
 MonoBehaviour:
@@ -1234,7 +1234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Game.NPC.NPCChatSetup
   npc: {fileID: 178363123}
-  apiKey: sk-200488c47eae4316b1c9df18607cdbaf
+  apiKey: 
   model: deepseek-flash
 --- !u!4 &551222406
 Transform:
@@ -1708,7 +1708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f66e9f74b21e24e8c86b1a774e77fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LLMProviderTest
-  apiKey: sk-200488c47eae4316b1c9df18607cdbaf
+  apiKey: 
   model: deepseek-flash
 --- !u!4 &1355453454
 Transform:

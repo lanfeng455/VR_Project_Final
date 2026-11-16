@@ -48,7 +48,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\TutorialInfo\Scripts\Editor\ReadmeEditor.cs" />
+    <Compile Include="Assets\Editor\LunaTTSSetup.cs" />
+    <Compile Include="Assets\Editor\LunaTVUIBuilder.cs" />
+    <Compile Include="Assets\Editor\LunaWhiteboardSetup.cs" />
+    <Compile Include="Assets\Editor\LunaTTSCacheSelfTest.cs" />
+    <Compile Include="Assets\Editor\FinalProjectVoiceSetup.cs" />
     <Compile Include="Assets\Scripts\Dev\Editor\EchoDevSetup.cs" />
+    <Compile Include="Assets\Editor\LunaInteractionTestSetup.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\UnityVersion\6000.3.12f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -472,50 +478,53 @@
     <Reference Include="UnityEditor.LinuxStandalone.Extensions">
       <HintPath>C:\UnityVersion\6000.3.12f1\Editor\Data\PlaybackEngines\LinuxStandaloneSupport\UnityEditor.LinuxStandalone.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="TextMateSharpPlastic">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
+    </Reference>
+    <Reference Include="TextMateSharpPlastic.Grammars">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\TextMateSharp\TextMateSharpPlastic.Grammars.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@4edfcc09512f\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collections@12999e356c23\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collections@84e8eb3fc12e\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.ext.nunit@d8c07649098d\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@a5329f833fa8\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="unityplastic">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\unityplastic.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenEditor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Assets\Plugins\Demigiant\DOTween\Editor\DOTweenEditor.dll</HintPath>
     </Reference>
+    <Reference Include="OnigwrapPlastic">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\TextMateSharp\Onigwrap\OnigwrapPlastic.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@a5329f833fa8\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="log4netPlastic">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@a5329f833fa8\Lib\Editor\log4netPlastic.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@4628d2ba6ea4\Lib\Editor\log4netPlastic.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
-    </Reference>
-    <Reference Include="System.IO.Hashing">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collections@12999e356c23\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
-    </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collab-proxy@a5329f833fa8\Lib\Editor\unityplastic.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@4edfcc09512f\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
       <HintPath>C:\Unity Projects\VR_Project_Final\Assets\Plugins\Demigiant\DOTween\DOTween.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@4edfcc09512f\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.TextureAssets">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.visualscripting@4edfcc09512f\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\PackageCache\com.unity.collections@12999e356c23\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Android.Types">
       <HintPath>C:\UnityVersion\6000.3.12f1\Editor\Data\PlaybackEngines\AndroidPlayer\Unity.Android.Types.dll</HintPath>
@@ -937,14 +946,14 @@
     <Reference Include="Meta.XR.Editor.Guide.Welcome">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.Editor.Guide.Welcome.dll</HintPath>
     </Reference>
-    <Reference Include="Meta.XR.RuntimeOptimizer.Core">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.RuntimeOptimizer.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Rendering.LightTransport.Editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.Rendering.LightTransport.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Oculus.VR">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Oculus.VR.dll</HintPath>
+    </Reference>
+    <Reference Include="Meta.XR.RuntimeOptimizer.Core">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.RuntimeOptimizer.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
@@ -1093,11 +1102,11 @@
     <Reference Include="Meta.XR.Editor.StatusMenu">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.Editor.StatusMenu.dll</HintPath>
     </Reference>
+    <Reference Include="glTFast.dots">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\glTFast.dots.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.XR.ARFoundation.VisualScripting.Editor">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.ARFoundation.VisualScripting.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.ARFoundation.InternalUtils">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.ARFoundation.InternalUtils.dll</HintPath>
@@ -1105,11 +1114,11 @@
     <Reference Include="UnityEditor.XR.LegacyInputHelpers">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.XR.ARFoundation.VisualScripting.Editor">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.ARFoundation.VisualScripting.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Meta.XR.BuildingBlocks.DepthAPI">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.BuildingBlocks.DepthAPI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InputSystem.ForUI">
-      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
@@ -1131,6 +1140,9 @@
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem.ForUI">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
     </Reference>
     <Reference Include="Oculus.Interaction.Editor.UnityXR">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Oculus.Interaction.Editor.UnityXR.dll</HintPath>
@@ -1213,11 +1225,17 @@
     <Reference Include="Unity.XR.Management">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.Management.dll</HintPath>
     </Reference>
+    <Reference Include="glTFast.Editor">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\glTFast.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.XR.Hands.Analytics.Editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.Hands.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Navigation">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.AI.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem.ForUI.Editor">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.InputSystem.ForUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.CompositionLayers">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.CompositionLayers.dll</HintPath>
@@ -1299,6 +1317,9 @@
     </Reference>
     <Reference Include="Unity.XR.Simulation.Editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.XR.Simulation.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.PlasticSCM.Editor.Assistant">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.Assistant.dll</HintPath>
     </Reference>
     <Reference Include="meta.xr.ai.mcpbridge.editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\meta.xr.ai.mcpbridge.editor.dll</HintPath>
@@ -1396,6 +1417,9 @@
     <Reference Include="Meta.XR.Editor.AIToolsSetup">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.Editor.AIToolsSetup.dll</HintPath>
     </Reference>
+    <Reference Include="glTFast">
+      <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\glTFast.dll</HintPath>
+    </Reference>
     <Reference Include="Meta.XR.BuildingBlocks.DepthAPI.Editor">
       <HintPath>C:\Unity Projects\VR_Project_Final\Library\ScriptAssemblies\Meta.XR.BuildingBlocks.DepthAPI.Editor.dll</HintPath>
     </Reference>
@@ -1420,6 +1444,14 @@
     <ProjectReference Include="Assembly-CSharp.csproj">
       <Project>{8a820283-89b7-5ae8-3131-80e8fb5d969e}</Project>
       <Name>Assembly-CSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="com.whisper.unity.editor.csproj">
+      <Project>{42acb470-3528-191c-c911-7f1d5454c842}</Project>
+      <Name>com.whisper.unity.editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="com.whisper.unity.csproj">
+      <Project>{42235160-b9f7-fa59-eddd-e9e95a2d9ec9}</Project>
+      <Name>com.whisper.unity</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -20,3 +20,9 @@
 
 # Local recovery report
 /RecoveryValidation.txt
+
+# Local API secrets (never commit)
+/Assets/Resources/LLM/llm-config.json
+/Assets/Resources/LLM/llm-config.json.meta
+/Assets/Resources/TTS/tts-config.json
+/Assets/Resources/TTS/tts-config.json.meta
