@@ -1,0 +1,13 @@
+CC0 assets from Poly Haven
+
+Sunflowers (Pure Sky) — Sergej Majboroda, sky edits by Jarod Guest
+https://polyhaven.com/a/sunflowers_puresky
+
+Tree Small 02 — Rico Cilliers
+https://polyhaven.com/a/tree_small_02
+Mesh simplified to two LODs. The leaf color and opacity maps were packed together.
+
+Grey Roof Tiles — Poly Haven
+https://polyhaven.com/a/grey_roof_tiles
+
+https://polyhaven.com/license
